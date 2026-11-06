@@ -59,11 +59,16 @@ body{margin:0;background:#eef3fa}
 .rx th{position:sticky;top:0;background:#f3f7fd;text-align:right;font-weight:800;color:var(--nv);padding:10px;white-space:nowrap;z-index:1;font-size:.72rem;letter-spacing:.04em;text-transform:uppercase}
 .rx td{padding:10px;text-align:right;border-bottom:1px solid var(--ln);white-space:nowrap}
 .rx tbody tr:hover td{background:#f7faff}
-.rx th.rx-l,.rx td.rx-l{text-align:left;white-space:normal;min-width:14rem}
+.rx th.rx-l,.rx td.rx-l{text-align:left;white-space:normal;min-width:16rem}
 .rx th.rx-c,.rx td.rx-c{text-align:center}
 .rx td.rx-rk{color:var(--mu);font-weight:800;text-align:center;width:2rem}
 .rx td.rx-ex{font-weight:700}
-.rx td.rx-eco{font-weight:800;color:var(--nv)}
+.rx td.rx-eco{font-weight:800;color:var(--nv);min-width:12rem}
+.rx-ecob{display:inline-flex;align-items:center;gap:12px;justify-content:flex-end}
+.rx-ecob b{min-width:6.6rem;text-align:right}
+.rx-ecot{width:110px;flex:none;height:8px;border-radius:4px;background:#e3ecf7;overflow:hidden;display:block}
+.rx-ecot span{display:block;height:100%;background:var(--am);border-radius:4px}
+.rx td.rx-ex{text-transform:none}
 .rx-badge{display:inline-block;font-size:.72rem;font-weight:800;padding:3px 9px;border-radius:999px;color:#fff;letter-spacing:.02em}
 .rx-red{display:inline-flex;align-items:center;gap:8px;justify-content:flex-end}
 .rx-red .rx-mini{width:52px;height:6px;border-radius:3px;background:#e3ecf7;overflow:hidden}
@@ -185,9 +190,9 @@ body{margin:0;background:#eef3fa}
   <div class="rx-main">
     <div class="rx-kpis">
       <div class="rx-kpi"><span>Gasto Red8 por ano</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</strong><small>Todos os exames</small></div>
-      <div class="rx-kpi"><span>Exames com Red8 mais cara</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="caros" data-cenf="100">—</strong><small>Entre os exames com preço unitário</small></div>
+      <div class="rx-kpi"><span>Exames analisados</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_cmp" data-cenf="100">—</strong><small>Red8 acima do menor preço</small></div>
       <div class="rx-kpi"><span>Concentração</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_a_txt" data-cenf="100">—</strong><small>somam 80% da economia</small></div>
-      <div class="rx-kpi"><span>Diferença média de preço</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red_media" data-cenf="100">—</strong><small>Red8 acima do menor preço</small></div>
+      <div class="rx-kpi"><span>Redução média necessária</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red_media" data-cenf="100">—</strong><small>Sobre o preço atual da Red8</small></div>
     </div>
 
     <section class="rx-card" id="cenarios">
@@ -242,10 +247,8 @@ body{margin:0;background:#eef3fa}
             <th data-field="preco_red8">Preço Red8</th>
             <th data-field="preco_menor">Menor preço</th>
             <th class="rx-c" data-field="prestador">Prestador</th>
-            <th data-field="red_pct">Diferença</th>
-            <th data-field="eco_50">Conservador/ano</th>
-            <th data-field="eco_75">Moderado/ano</th>
-            <th data-field="dif_ano">Agressivo/ano</th>
+            <th data-field="red_pct">Red8 acima</th>
+            <th data-field="dif_ano">Economia/ano (até)</th>
           </tr></thead>
           <tbody data-draw="prio"></tbody>
         </table>
@@ -339,6 +342,9 @@ dash.calc('resumo', {
   },
 });
 
+const SIGLAS = new Set(['PSA', 'IGA', 'IGG', 'IGM', 'IGD', 'IGE', 'TSH', 'SHBG', 'PCR', 'TPO', 'RAST', 'HX2', 'IGFBP3', 'ANCA', 'HIV', 'HPV', 'DNA', 'RNA', 'FTA', 'ABS', 'GAD', 'NGS', 'CNV', 'HFE', 'PML', 'RARA', 'RT', 'B12', 'T4', 'T3', 'C1', 'OH']);
+const MINUS = new Set(['de', 'da', 'do', 'das', 'dos', 'e', 'para', 'por', 'em', 'na', 'no', 'a', 'o']);
+const nice = (s) => s.toLowerCase().split(/(\s+|\/|-|,|\(|\))/).map((w, i) => SIGLAS.has(w.toUpperCase()) ? w.toUpperCase() : (i > 0 && MINUS.has(w)) ? w : w.charAt(0).toUpperCase() + w.slice(1)).join('').replace(/\s+,/g, ',');
 const mk = (tag, cls, txt) => { const n = document.createElement(tag); if (cls) n.className = cls; if (txt != null) n.textContent = txt; return n; };
 const badge = (p) => { const b = mk('span', 'rx-badge', p); b.style.background = COR[p] || '#587184'; return b; };
 
@@ -407,7 +413,7 @@ dash.draw('curve', (el) => {
     i.style.background = x.cor;
     const nm = mk('span');
     nm.append(mk('b', '', x.nome));
-    if (x.rows.length <= 5) nm.append(mk('small', '', x.rows.map((r) => r.exame.split(' - ')[0].split(' / ')[0].toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase())).join(', ')));
+    if (x.rows.length <= 5) nm.append(mk('small', '', x.rows.map((r) => nice(r.exame.split(' / ')[0].replace(/^VIRUS, \(SINCICIAL, RESPIRATORIO\).*/, 'VÍRUS SINCICIAL RESPIRATÓRIO').replace(' COMPLETO', '').replace(/^ANTICORPOS? /, 'ANTI-').replace('ANTI-ANTI ', 'ANTI-'))).join(' · ')));
     row.append(i, nm, mk('strong', '', f0(x.v)), mk('span', 'rx-cpct', Math.round(x.v / total * 100) + '%'));
     list.append(row);
   });
@@ -425,15 +431,19 @@ dash.draw('prio', (el) => {
     tr.dataset.key = r.key;
     const add = (cls, content) => { const td = tr.insertCell(); if (cls) td.className = cls; if (content instanceof Node) td.append(content); else td.textContent = content; };
     add('rx-rk', String(r.rank));
-    add('rx-l rx-ex', r.exame);
+    add('rx-l rx-ex', nice(r.exame));
     add('', r.media_mes == null ? '' : n0.format(r.media_mes));
     add('', f2(r.preco_red8));
     add('', f2(r.preco_menor));
     add('rx-c', badge(r.prestador));
-    add('', '−' + String(r.red_pct).replace('.', ',') + '%');
-    add('', f0(r.eco_50));
-    add('', f0(r.eco_75));
-    add('rx-eco', f0(r.dif_ano));
+    add('', '+' + String(Math.round(r.red_pct / (100 - r.red_pct) * 1000) / 10).replace('.', ',') + '%');
+    const eco = mk('span', 'rx-ecob');
+    const trk = mk('span', 'rx-ecot');
+    const fil = mk('span');
+    fil.style.width = (r.dif_ano / g.data[0].dif_ano * 100) + '%';
+    trk.append(fil);
+    eco.append(trk, mk('b', '', f0(r.dif_ano)));
+    add('rx-eco', eco);
   });
 });
 
