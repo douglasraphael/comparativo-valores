@@ -171,7 +171,7 @@ body{margin:0;background:#eef3fa}
   <div class="rx-main">
     <div class="rx-kpis">
       <div class="rx-kpi"><span>Gasto Red8 por ano</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</strong><small>Todos os exames</small></div>
-      <div class="rx-kpi"><span>Exames com Red8 mais cara</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="caros" data-cenf="100">—</strong><small>Comparado ao menor preço</small></div>
+      <div class="rx-kpi"><span>Exames com Red8 mais cara</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="caros" data-cenf="100">—</strong><small>Entre os exames com preço unitário</small></div>
       <div class="rx-kpi"><span>Concentração</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_a_txt" data-cenf="100">—</strong><small>somam 80% da economia</small></div>
       <div class="rx-kpi"><span>Diferença média de preço</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red_media" data-cenf="100">—</strong><small>Red8 acima do menor preço</small></div>
     </div>
@@ -236,7 +236,7 @@ body{margin:0;background:#eef3fa}
           <tbody data-draw="prio"></tbody>
         </table>
       </div>
-      <p class="rx-note">Valores anuais pela média de solicitações de jun/25 a jun/26 (13 meses). Menor preço entre DASA, CDB, Rede, Pardini e Fleury. Preço em branco: a planilha traz só o valor do período, sem volume.</p>
+      <p class="rx-note">Valores anuais pela média de solicitações de jun/25 a jun/26 (13 meses). Menor preço entre DASA, CDB, Rede, Pardini e Fleury. Considera só exames com preço unitário e volume informados.</p>
     </section>
   </div>
 </div>
@@ -272,10 +272,10 @@ dash.calc('analise', {
 
 dash.calc('prioridades', {
   title: 'Exames por impacto',
-  description: 'Exames em que a Red8 é mais cara, do maior para o menor impacto, com diferença em %, economia em cada cenário (50%, 75%, 100% da diferença) e acumulado.',
+  description: 'Exames com preço unitário em que a Red8 é mais cara, do maior para o menor impacto, com diferença em %, economia em cada cenário (50%, 75%, 100% da diferença) e acumulado.',
   inputs: ['analise'],
   fn: (analise) => {
-    const rows = analise.filter((r) => r.dif_ano > 0).sort((a, b) => b.dif_ano - a.dif_ano);
+    const rows = analise.filter((r) => r.dif_ano > 0 && r.preco_red8 != null).sort((a, b) => b.dif_ano - a.dif_ano);
     const total = rows.reduce((s, r) => s + r.dif_ano, 0);
     let acc = 0;
     return rows.map((r, i) => {
@@ -315,7 +315,7 @@ dash.calc('resumo', {
         m('economia', eco, brl(eco)),
         m('mes', eco / 12, brl(eco / 12)),
         m('red8', s(analise, 'red8_ano'), brl(s(analise, 'red8_ano'))),
-        m('caros', prioridades.length, prioridades.length + ' de ' + analise.length),
+        m('caros', prioridades.length, prioridades.length + ' de ' + analise.filter((r) => r.preco_red8 != null).length),
         m('n_a', nA, String(nA)),
         m('n_a_txt', nA, nA + ' exames'),
         m('red_media', eco / s(prioridades, 'red8_ano'), (eco / s(prioridades, 'red8_ano') * 100).toFixed(1).replace('.', ',') + '%'),
