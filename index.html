@@ -27,8 +27,10 @@ body{margin:0;background:#eef3fa}
 .rx-big strong{display:block;font-size:clamp(1.9rem,4.4vw,3rem);font-weight:800;line-height:1.05;color:#fff}
 .rx-big strong span{display:inline;white-space:nowrap;font:inherit;color:inherit;text-transform:none;letter-spacing:normal}
 .rx-big em{font-style:normal;font-size:.85rem;color:#cfe0f5}
-@media (max-width:760px){.rx-hero-in{grid-template-columns:minmax(0,1fr)}}
-@media (min-width:1000px){.rx-hero h1{white-space:nowrap;font-size:clamp(1.5rem,2.3vw,2rem)}}
+@media (max-width:999px){.rx-hero-in{grid-template-columns:minmax(0,1fr)}}
+@media (min-width:640px){.rx-hero h1{white-space:nowrap;font-size:clamp(1.3rem,3.3vw,2rem)}}
+@media (min-width:1000px){.rx-hero h1{font-size:clamp(1.3rem,2.25vw,2rem)}}
+.rx-big strong{white-space:nowrap}
 .rx-main{display:flex;flex-direction:column;gap:18px;max-width:1240px;margin-inline:auto;box-sizing:border-box;padding:22px max(16px,3vw) 40px}
 .rx-kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,12rem),1fr));gap:12px;margin-top:-44px}
 .rx-kpi{background:#fff;border:1px solid var(--ln);border-radius:14px;padding:14px 16px;display:flex;flex-direction:column;gap:3px;box-shadow:0 12px 28px rgba(4,52,122,.12)}
