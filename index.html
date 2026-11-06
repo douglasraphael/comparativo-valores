@@ -170,9 +170,9 @@ body{margin:0;background:#eef3fa}
   <section class="rx-hero" id="topo">
     <div class="rx-hero-in">
       <div>
-        <span class="rx-eye">Análises Clínicas · Red8</span>
-        <h1>A Red8 cobra acima do menor preço do mercado em <span class="rx-y" data-draw="k" data-source="resumo" data-field="texto" data-m="caros" data-cenf="100">—</span> exames</h1>
-        <p>Igualando esses preços ao menor do mercado, a estimativa é de até <b data-draw="k" data-source="resumo" data-field="texto" data-m="economia" data-cenf="100">—</b> por ano, sobre um gasto anual de <b data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</b> com a Red8.</p>
+        <span class="rx-eye">Relatório para a diretoria</span>
+        <h1>Análises Clínicas: revisão de preços da Red8</h1>
+        <p>Comparando o preço da Red8 com o menor valor do mercado (DASA, CDB, Rede, Pardini e Fleury) em <b data-draw="k" data-source="resumo" data-field="texto" data-m="n_cmp" data-cenf="100">—</b> exames, sobre um gasto anual de <b data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</b>.</p>
       </div>
       <div class="rx-big">
         <span>Estimativa de economia anual</span>
@@ -330,6 +330,7 @@ dash.calc('resumo', {
         m('mes', eco / 12, brl(eco / 12)),
         m('red8', s(analise, 'red8_ano'), brl(s(analise, 'red8_ano'))),
         m('caros', prioridades.length, prioridades.length + ' de ' + analise.filter((r) => r.preco_red8 != null).length),
+        m('n_cmp', prioridades.length, String(prioridades.length)),
         m('n_a', nA, String(nA)),
         m('n_a_txt', nA, nA + ' exames'),
         m('red_media', eco / s(prioridades, 'red8_ano'), (eco / s(prioridades, 'red8_ano') * 100).toFixed(1).replace('.', ',') + '%'),
