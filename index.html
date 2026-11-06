@@ -49,7 +49,7 @@ body{margin:0;background:#eef3fa}
 .rx-pl b{font-weight:800}
 .rx-pl small{color:var(--mu);font-size:.78rem;white-space:nowrap}
 .rx-pl strong{color:var(--nv);white-space:nowrap;text-align:right;min-width:6.5rem}
-.rx-curve{position:relative;min-height:15rem}
+.rx-curve{position:relative;min-height:15rem;display:flex;flex-direction:column;gap:14px}
 .rx-curve svg{display:block}
 .rx-curve text{fill:var(--mu);font-size:11px}
 .rx-curve text.rx-s{fill:var(--nv);font-weight:800;font-size:12px}
@@ -88,6 +88,18 @@ body{margin:0;background:#eef3fa}
 .rx-meth{margin:0;padding-left:20px;display:flex;flex-direction:column;gap:6px;font-size:.82rem;color:var(--mu)}
 .rx-meth b{color:var(--fg)}
 .rx-tip{position:absolute;z-index:6;pointer-events:none;background:#fff;border:1px solid var(--ln);border-radius:8px;box-shadow:0 10px 26px rgba(4,52,122,.16);padding:6px 10px;font-size:.78rem;max-width:18rem}
+.rx-cmsg{font-size:1rem;color:var(--fg)}
+.rx-cmsg b{color:var(--nv);font-weight:800}
+.rx-cbar{display:flex;gap:3px;height:44px;border-radius:10px;overflow:hidden}
+.rx-cseg{display:grid;place-items:center;font-weight:800;font-size:.85rem;min-width:36px}
+.rx-clist{display:flex;flex-direction:column}
+.rx-crow{display:grid;grid-template-columns:12px minmax(0,1fr) auto 3rem;gap:10px;align-items:center;padding:10px 0;border-bottom:1px solid var(--ln);font-size:.85rem}
+.rx-crow:last-child{border-bottom:0}
+.rx-crow i{width:12px;height:12px;border-radius:3px}
+.rx-crow b{font-weight:800}
+.rx-crow small{display:block;color:var(--mu);font-size:.78rem}
+.rx-crow strong{color:var(--nv);white-space:nowrap}
+.rx-cpct{text-align:right;color:var(--mu);font-weight:700}
 [data-dash-source-state=refreshing]{opacity:.5}
 .rx-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));gap:12px}
 .rx-step{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 18px 16px;border-radius:16px;border:1px solid var(--ln);background:#fff;transition:transform .18s,box-shadow .18s,background .18s}
@@ -214,7 +226,7 @@ body{margin:0;background:#eef3fa}
       </section>
       <section class="rx-card" id="concentracao">
         <div class="rx-ch"><h2><i></i>Concentração da economia</h2></div>
-        <p class="rx-note">Economia acumulada, do exame de maior impacto ao de menor.</p>
+        <p class="rx-note">Economia anual separada em três grupos de exames, do maior impacto ao menor.</p>
         <div class="rx-curve" data-draw="curve" data-source="prioridades"></div>
       </section>
     </div>
@@ -372,41 +384,35 @@ dash.draw('curve', (el) => {
   el.replaceChildren();
   if (g.status !== 'ok' || !g.data.length) { el.textContent = '—'; return; }
   const rows = g.data;
-  const pts = [{i: 0, s: 0}, ...rows.map((r) => ({i: r.rank, s: r.acum_pct / 100, r}))];
-  const W = Math.max(el.clientWidth, 280), H = 250, m = {t: 16, r: 18, b: 30, l: 42};
-  const x = d3.scaleLinear([0, rows.length], [m.l, W - m.r]);
-  const y = d3.scaleLinear([0, 1], [H - m.b, m.t]);
-  const svg = d3.select(el).append('svg').attr('width', '100%').attr('viewBox', `0 0 ${W} ${H}`).attr('role', 'img').attr('aria-label', 'Economia acumulada por número de exames');
-  [0, .25, .5, .75, 1].forEach((t) => {
-    svg.append('line').attr('x1', m.l).attr('x2', W - m.r).attr('y1', y(t)).attr('y2', y(t)).style('stroke', '#e3ecf7');
-    svg.append('text').attr('x', m.l - 8).attr('y', y(t) + 4).attr('text-anchor', 'end').text(Math.round(t * 100) + '%');
-  });
-  x.ticks(5).filter(Number.isInteger).forEach((t) => svg.append('text').attr('x', x(t)).attr('y', H - 10).attr('text-anchor', 'middle').text(t));
+  const total = rows.reduce((s, r) => s + r.dif_ano, 0);
   const nA = rows.filter((r) => r.prioridade === 'A').length;
-  svg.append('rect').attr('x', m.l).attr('y', m.t).attr('width', x(nA) - m.l).attr('height', H - m.b - m.t).style('fill', '#ffc20e').style('opacity', .12);
-  const grad = svg.append('defs').append('linearGradient').attr('id', 'rx-g').attr('x1', 0).attr('x2', 0).attr('y1', 0).attr('y2', 1);
-  [[0, .28], [1, 0]].forEach(([o, a]) => grad.append('stop').attr('offset', o).style('stop-color', '#04347a').style('stop-opacity', a));
-  svg.append('path').datum(pts).attr('fill', 'url(#rx-g)').attr('d', d3.area().x((d) => x(d.i)).y0(H - m.b).y1((d) => y(d.s)));
-  svg.append('path').datum(pts).attr('fill', 'none').style('stroke', '#04347a').attr('stroke-width', 2.5).attr('stroke-linejoin', 'round').attr('d', d3.line().x((d) => x(d.i)).y((d) => y(d.s)));
-  const p = pts[nA];
-  svg.append('circle').attr('cx', x(p.i)).attr('cy', y(p.s)).attr('r', 6).style('fill', '#ffc20e').style('stroke', '#04347a').attr('stroke-width', 2);
-  svg.append('text').attr('class', 'rx-s').attr('x', x(p.i) + 12).attr('y', y(p.s) + 20).text(nA + ' exames = ' + n0.format(p.s * 100) + '% da economia');
-  const dot = svg.append('circle').attr('r', 4).style('fill', '#fff').style('stroke', '#04347a').attr('stroke-width', 2).attr('visibility', 'hidden');
-  const tip = mk('div', 'rx-tip');
-  tip.hidden = true;
-  el.append(tip);
-  svg.on('pointermove', (e) => {
-    const [px] = d3.pointer(e);
-    const i = Math.max(1, Math.min(rows.length, Math.round(x.invert(px))));
-    const q = pts[i];
-    dot.attr('cx', x(q.i)).attr('cy', y(q.s)).attr('visibility', 'visible');
-    tip.textContent = i + 'º ' + q.r.exame + ' · ' + n0.format(q.s * 100) + '% acumulado';
-    tip.hidden = false;
-    const b = el.getBoundingClientRect();
-    tip.style.left = Math.min(e.clientX - b.left + 12, Math.max(0, b.width - tip.offsetWidth)) + 'px';
-    tip.style.top = Math.max(0, e.clientY - b.top - 44) + 'px';
+  const grupos = [
+    {nome: '5 maiores exames', rows: rows.slice(0, 5), cor: '#04347a', txt: '#fff'},
+    {nome: 'Do 6º ao ' + nA + 'º exame', rows: rows.slice(5, nA), cor: '#0b8bd6', txt: '#fff'},
+    {nome: 'Demais ' + (rows.length - nA) + ' exames', rows: rows.slice(nA), cor: '#c9d8ec', txt: '#04347a'},
+  ].map((x) => ({...x, v: x.rows.reduce((s, r) => s + r.dif_ano, 0)}));
+  const bar = mk('div', 'rx-cbar');
+  grupos.forEach((x) => {
+    const seg = mk('div', 'rx-cseg', Math.round(x.v / total * 100) + '%');
+    seg.style.flex = String(x.v);
+    seg.style.background = x.cor;
+    seg.style.color = x.txt;
+    bar.append(seg);
   });
-  svg.on('pointerleave', () => { tip.hidden = true; dot.attr('visibility', 'hidden'); });
+  const list = mk('div', 'rx-clist');
+  grupos.forEach((x) => {
+    const row = mk('div', 'rx-crow');
+    const i = mk('i');
+    i.style.background = x.cor;
+    const nm = mk('span');
+    nm.append(mk('b', '', x.nome));
+    if (x.rows.length <= 5) nm.append(mk('small', '', x.rows.map((r) => r.exame.split(' - ')[0].split(' / ')[0].toLowerCase().replace(/(^|\s)\S/g, (c) => c.toUpperCase())).join(', ')));
+    row.append(i, nm, mk('strong', '', f0(x.v)), mk('span', 'rx-cpct', Math.round(x.v / total * 100) + '%'));
+    list.append(row);
+  });
+  const msg = mk('p', 'rx-cmsg');
+  msg.append(mk('b', '', nA + ' exames'), ' respondem por ' + Math.round(grupos[0].v / total * 100 + grupos[1].v / total * 100) + '% da economia anual.');
+  el.append(msg, bar, list);
 });
 
 dash.draw('prio', (el) => {
