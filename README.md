@@ -11,7 +11,9 @@ Análise do valor pago à Red8 em exames de análises clínicas comparado ao men
 
 ## Metodologia
 
-- Período: jun/25 a jun/26 (13 competências). Valores anuais = valor do período ÷ 13 × 12.
+- Período: nov/25 a out/26 (12 meses). Volumes de nov/25 a jun/26 da planilha comparativa e de jul/26 a out/26 dos relatórios de repasse da Red8.
+- Valores anuais = preço unitário × solicitações dos 12 meses. Exames sem preço unitário: valor de jun/25 a jun/26 ÷ 13 × 12.
+- Preços da Red8 da planilha comparativa, exceto PSA Total (MV 1067): R$ 23,73, valor faturado nos relatórios.
 - Menor preço: menor valor entre DASA, CDB, Rede, Pardini e Fleury para cada exame. Zero foi tratado como sem cotação.
 - Homocisteína (MV 818): sem o preço da Rede.
 - Códigos MV repetidos foram contados uma vez.
@@ -20,5 +22,5 @@ Análise do valor pago à Red8 em exames de análises clínicas comparado ao men
 
 ## Colunas do CSV
 
-`red8`, `dasa`, `cdb`, `rede`, `pardini`, `fleury`: valor total do período por prestador.
-`u_*`: preço unitário por exame, quando disponível. `qtd`: solicitações no período.
+`red8`, `dasa`, `cdb`, `rede`, `pardini`, `fleury`: valor anual por prestador.
+`u_*`: preço unitário por exame, quando disponível. `qtd`: solicitações nos 12 meses.
