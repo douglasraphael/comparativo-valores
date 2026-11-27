@@ -113,6 +113,35 @@ body{margin:0;background:#eef3fa}
 @media (min-width:2100px){.rx{zoom:1.28}}
 @media (min-width:2450px){.rx{zoom:1.45}}
 @media (min-width:3000px){.rx{zoom:1.75}}
+.rx-hero{position:relative;overflow:hidden}
+.rx-hero::before{content:"";position:absolute;inset:0;pointer-events:none;background:radial-gradient(circle at 88% -20%,rgba(255,194,14,.20) 0,rgba(255,194,14,0) 34%),radial-gradient(circle at 70% 130%,rgba(47,168,154,.28) 0,rgba(47,168,154,0) 40%),repeating-linear-gradient(135deg,rgba(255,255,255,.035) 0 2px,transparent 2px 22px)}
+.rx-hero-in{position:relative}
+.rx-big{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.16);border-left:4px solid var(--am);border-radius:16px;padding:18px 22px;backdrop-filter:blur(4px)}
+.rx-kpi{position:relative;padding-left:66px;min-height:92px;justify-content:center;transition:transform .18s,box-shadow .18s}
+.rx-kpi:hover{transform:translateY(-2px);box-shadow:0 16px 32px rgba(4,52,122,.16)}
+.rx-ico{position:absolute;left:16px;top:50%;transform:translateY(-50%);width:38px;height:38px;border-radius:11px;display:grid;place-items:center;background:#e8f0fb;color:var(--nv)}
+.rx-kpi:nth-child(4) .rx-ico{background:#fff4cc;color:#8a5f00}
+.rx-ico svg,.rx-hico svg{width:20px;height:20px;fill:none;stroke:currentColor;stroke-width:1.9;stroke-linecap:round;stroke-linejoin:round}
+.rx-ch h2{display:flex;align-items:center;gap:10px}
+.rx-hico{width:32px;height:32px;border-radius:9px;display:grid;place-items:center;background:var(--nv);color:var(--am);flex:none}
+.rx-hico svg{width:17px;height:17px}
+.rx-card{transition:box-shadow .2s}
+.rx-card:hover{box-shadow:0 14px 34px rgba(4,52,122,.10)}
+.rx-sc{transition:transform .18s}
+.rx-sc:hover{transform:translateY(-2px)}
+.rx #exames .rx-scroll{border-radius:12px;border:1px solid var(--ln)}
+.rx #exames th{background:var(--nv);color:#fff;border:0}
+.rx #exames th:first-child{border-top-left-radius:11px}
+.rx #exames th:last-child{border-top-right-radius:11px}
+.rx #exames tbody tr:nth-child(even) td{background:#f7faff}
+.rx #exames tbody tr:hover td{background:#eef4fc}
+.rx #exames tbody tr:last-child td{border-bottom:0}
+.rx-rkb{display:inline-grid;place-items:center;width:26px;height:26px;border-radius:50%;background:#e8f0fb;color:var(--nv);font-size:.78rem;font-weight:800}
+.rx-rkb.rx-top{background:var(--am);color:var(--nv)}
+.rx-foot{background:var(--nv);color:#cfe0f5;margin-top:8px;border-top:4px solid var(--am)}
+.rx-foot-in{max-width:calc(1600px - 2 * max(16px,3vw));margin-inline:auto;padding:18px max(16px,3vw);display:flex;flex-wrap:wrap;justify-content:space-between;gap:8px 24px;font-size:.78rem;box-sizing:content-box}
+.rx-foot b{color:#fff}
+@media (max-width:560px){.rx-kpi{padding-left:16px;padding-top:62px}.rx-ico{top:16px;transform:none}}
 [data-dash-source-state=refreshing]{opacity:.5}
 .rx-steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,16rem),1fr));gap:12px}
 .rx-step{all:unset;box-sizing:border-box;cursor:pointer;position:relative;display:flex;flex-direction:column;gap:6px;padding:18px 18px 16px;border-radius:16px;border:1px solid var(--ln);background:#fff;transition:transform .18s,box-shadow .18s,background .18s}
@@ -198,14 +227,14 @@ body{margin:0;background:#eef3fa}
 
   <div class="rx-main">
     <div class="rx-kpis">
-      <div class="rx-kpi"><span>Gasto Red8 por ano</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</strong><small>Todos os exames</small></div>
-      <div class="rx-kpi"><span>Exames analisados</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_cmp" data-cenf="100">—</strong><small>Red8 acima do menor preço</small></div>
-      <div class="rx-kpi"><span>Concentração</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_a_txt" data-cenf="100">—</strong><small>somam 80% da economia</small></div>
-      <div class="rx-kpi"><span>Redução média necessária</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red_media" data-cenf="100">—</strong><small>Sobre o preço atual da Red8</small></div>
+      <div class="rx-kpi"><b class="rx-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 7a2 2 0 0 1 2-2h12v4"/><path d="M3 7v10a2 2 0 0 0 2 2h14V9H5a2 2 0 0 1-2-2z"/><circle cx="16" cy="14" r="1.3"/></svg></b><span>Gasto Red8 por ano</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red8" data-cenf="100">—</strong><small>Todos os exames</small></div>
+      <div class="rx-kpi"><b class="rx-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 3h6"/><path d="M10 3v6l-5 9a2 2 0 0 0 1.7 3h10.6a2 2 0 0 0 1.7-3l-5-9V3"/><path d="M7.5 15h9"/></svg></b><span>Exames analisados</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_cmp" data-cenf="100">—</strong><small>Red8 acima do menor preço</small></div>
+      <div class="rx-kpi"><b class="rx-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="8"/><circle cx="12" cy="12" r="4"/><circle cx="12" cy="12" r="1"/></svg></b><span>Concentração</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="n_a_txt" data-cenf="100">—</strong><small>somam 80% da economia</small></div>
+      <div class="rx-kpi"><b class="rx-ico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 7l6 6 4-4 6 6"/><path d="M20 10v5h-5"/></svg></b><span>Redução média necessária</span><strong data-draw="k" data-source="resumo" data-field="texto" data-m="red_media" data-cenf="100">—</strong><small>Sobre o preço atual da Red8</small></div>
     </div>
 
     <section class="rx-card" id="cenarios">
-      <div class="rx-ch"><h2><i></i>Cenários de economia anual</h2></div>
+      <div class="rx-ch"><h2><b class="rx-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3l9 5-9 5-9-5 9-5z"/><path d="M3 13l9 5 9-5"/></svg></b>Cenários de economia anual</h2></div>
       <div class="rx-steps">
         <div class="rx-sc">
           <span class="rx-sc-n">Conservador</span>
@@ -233,20 +262,20 @@ body{margin:0;background:#eef3fa}
 
     <div class="rx-two">
       <section class="rx-card" id="prestadores">
-        <div class="rx-ch"><h2><i></i>Prestador com o menor preço</h2></div>
+        <div class="rx-ch"><h2><b class="rx-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="9" cy="8" r="3"/><path d="M3 20a6 6 0 0 1 12 0"/><circle cx="17" cy="9" r="2.5"/><path d="M15.5 14.2A5 5 0 0 1 21 19"/></svg></b>Prestador com o menor preço</h2></div>
         <p class="rx-note">Parte da economia por prestador de referência, no cenário agressivo.</p>
         <div class="rx-stack" data-draw="stack" data-source="por_prestador"></div>
         <div class="rx-plist" data-draw="plist" data-source="por_prestador"></div>
       </section>
       <section class="rx-card" id="concentracao">
-        <div class="rx-ch"><h2><i></i>Concentração da economia</h2></div>
+        <div class="rx-ch"><h2><b class="rx-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v9h9"/><path d="M20.5 15A9 9 0 1 1 9 3.5"/></svg></b>Concentração da economia</h2></div>
         <p class="rx-note">Economia anual separada em três grupos de exames, do maior impacto ao menor.</p>
         <div class="rx-curve" data-draw="curve" data-source="prioridades"></div>
       </section>
     </div>
 
     <section class="rx-card" id="exames">
-      <div class="rx-ch"><h2><i></i>20 exames de maior impacto</h2></div>
+      <div class="rx-ch"><h2><b class="rx-hico"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 6h11M9 12h11M9 18h11"/><circle cx="4.5" cy="6" r="1"/><circle cx="4.5" cy="12" r="1"/><circle cx="4.5" cy="18" r="1"/></svg></b>20 exames de maior impacto</h2></div>
       <div class="rx-scroll">
         <table data-source="prioridades" data-row-key="key">
           <thead><tr>
@@ -265,6 +294,12 @@ body{margin:0;background:#eef3fa}
       <p class="rx-note">Valores anuais pela média mensal de jan/26 a out/26 (10 meses) × 12; de jul a out/26, só exames com laudo. Menor preço entre DASA, CDB, Rede, Pardini e Fleury. Considera só exames com preço unitário e volume informados.</p>
     </section>
   </div>
+  <footer class="rx-foot">
+    <div class="rx-foot-in">
+      <span><b>São Cristóvão Saúde</b> · Medicina Diagnóstica · SADT / Laboratório</span>
+      <span>Fontes: tabela comparativa de prestadores e relatórios de repasse da Red8 (jan a out/26). Uso interno.</span>
+    </div>
+  </footer>
 </div>
 
 <script>
@@ -370,7 +405,6 @@ dash.draw('stack', (el) => {
   const g = dash.data('por_prestador');
   el.replaceChildren();
   if (g.status !== 'ok') return;
-  el.classList.add('rx-anim');
   g.data.filter((r) => r.cen === cenNow() && r.economia > 0).forEach((r) => {
     const d = mk('div');
     d.style.flex = String(r.economia);
@@ -439,7 +473,7 @@ dash.draw('prio', (el) => {
     const tr = el.insertRow();
     tr.dataset.key = r.key;
     const add = (cls, content) => { const td = tr.insertCell(); if (cls) td.className = cls; if (content instanceof Node) td.append(content); else td.textContent = content; };
-    add('rx-rk', String(r.rank));
+    add('rx-rk', mk('span', r.rank <= 3 ? 'rx-rkb rx-top' : 'rx-rkb', String(r.rank)));
     add('rx-l rx-ex', nice(r.exame));
     add('', r.media_mes == null ? '' : n0.format(r.media_mes));
     add('', f2(r.preco_red8));
